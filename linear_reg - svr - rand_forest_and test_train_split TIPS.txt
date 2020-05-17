@@ -1,0 +1,91 @@
+LINEAR REGRESSION
+=================
+
+https://realpython.com/linear-regression-in-python/
+
+SVR
+===
+https://www.aionlinecourse.com/tutorial/machine-learning/support-vector-regression
+
+---------------------------------------------------------------------
+https://turi.com/learn/userguide/supervised-learning/random_forest_regression.html
+---------------------------------------------------------------------
+https://towardsdatascience.com/random-forest-in-python-24d0893d51c0
+
+I am setting the random state to 42 which means the results will be the same each time I run the split for reproducible results.
+
+# Using Skicit-learn to split data into training and testing sets
+from sklearn.model_selection import train_test_split
+
+# Split the data into training and testing sets
+train_features, test_features, train_labels, test_labels = train_test_split(features, labels, test_size = 0.25, random_state = 42)
+
+
+TRAIN THE MODEL
+---------------
+
+# Import the model we are using
+from sklearn.ensemble import RandomForestRegressor
+
+# Instantiate model with 1000 decision trees
+rf = RandomForestRegressor(n_estimators = 1000, random_state = 42)
+
+# Train the model on training data
+rf.fit(train_features, train_labels);
+
+=======================================================================================
+
+https://stackoverflow.com/questions/38250710/how-to-split-data-into-3-sets-train-validation-and-test
+
+One approach to dividing the dataset into train, test, cv with 0.6, 0.2, 0.2 would be to use 
+the train_test_split method twice.
+
+from sklearn.model_selection import train_test_split
+
+x, x_test, y, y_test = train_test_split(xtrain,labels,test_size=0.2,train_size=0.8)
+x_train, x_cv, y_train, y_cv = train_test_split(x,y,test_size = 0.25,train_size =0.75)
+
+=======================================================================================
+https://stackoverflow.com/questions/43693878/how-to-perform-a-train-test-and-validation-set-to-predict
+
+Usually the terminology is as follows:
+
+1) The training set is used to build the classifier
+2) The validation set is used to tune the algorithm hyperparameters repeatedly. So there will be some overfitting here, but that is why there is another stage:
+3) The test set must not be touched until the classifier is final to prevent overfitting. It serves to estimate the true accuracy, if you would put the model into production.
+
+
+=======================================================================================
+https://towardsdatascience.com/train-validation-and-test-sets-72cb40cba9e7
+
+
+=======================================================================================
+https://towardsdatascience.com/random-forest-in-python-24d0893d51c0
+
+predictions = rf.predict(..) #### RandomForestRegressor
+
+# Get numerical feature importances
+importances = list(rf.feature_importances_)
+
+# List of tuples with variable and importance
+feature_importances = [(feature, round(importance, 2)) for feature, importance in zip(feature_list, importances)]
+
+# Sort the feature importances by most important first
+feature_importances = sorted(feature_importances, key = lambda x: x[1], reverse = True)
+
+# Print out the feature and importances 
+[print('Variable: {:20} Importance: {}'.format(*pair)) for pair in feature_importances];
+Variable: temp_1               Importance: 0.7
+Variable: average              Importance: 0.19
+Variable: day                  Importance: 0.03
+Variable: temp_2               Importance: 0.02
+Variable: friend               Importance: 0.02
+Variable: month                Importance: 0.01
+Variable: year                 Importance: 0.0
+Variable: week_Fri             Importance: 0.0
+Variable: week_Mon             Importance: 0.0
+Variable: week_Sat             Importance: 0.0
+Variable: week_Sun             Importance: 0.0
+Variable: week_Thurs           Importance: 0.0
+Variable: week_Tues            Importance: 0.0
+Variable: week_Wed             Importance: 0.0

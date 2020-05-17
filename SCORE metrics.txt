@@ -1,0 +1,54 @@
+https://www.datatechnotes.com/2019/10/accuracy-check-in-python-mae-mse-rmse-r.html
+
+##Metrics calculation by sklearn.metrics
+##Sklearn provides the number of metrics to evaluate accuracy. The next method is to calculate metrics with sklearn fu	nctions.
+
+import sklearn.metrics as metrics
+mae = metrics.mean_absolute_error(y, yhat)
+mse = metrics.mean_squared_error(y, yhat)
+rmse = np.sqrt(mse) # or mse**(0.5)  
+r2 = metrics.r2_score(y,yhat)
+
+print("Results of sklearn.metrics:")
+print("MAE:",mae)
+print("MSE:", mse)
+print("RMSE:", rmse)
+print("R-Squared:", r2)
+ 
+Results of sklearn.metrics:
+MAE: 0.5833333333333334
+MSE: 0.75
+RMSE: 0.8660254037844386
+R-Squared: 0.8655043586550436 
+-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x
+
+Metrics calculation by formula 
+
+By using the above formulas, we can easily calculate them in Python.
+
+# calculate manually
+d = y - yhat
+mse_f = np.mean(d**2)
+mae_f = np.mean(abs(d))
+rmse_f = np.sqrt(mse_f)
+r2_f = 1-(sum(d**2)/sum((y-np.mean(y))**2))
+
+print("Results by manual calculation:")
+print("MAE:",mae_f)
+print("MSE:", mse_f)
+print("RMSE:", rmse_f)
+print("R-Squared:", r2_f)
+ 
+Results by manual calculation:
+MAE: 0.5833333333333334
+MSE: 0.75
+RMSE: 0.8660254037844386
+R-Squared: 0.8655043586550436 
+
+===============================================================================================================
+
+https://www.studytonight.com/post/what-is-mean-squared-error-mean-absolute-error-root-mean-squared-error-and-r-squared
+
+
+
+

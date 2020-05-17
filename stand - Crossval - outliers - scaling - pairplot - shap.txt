@@ -1,0 +1,104 @@
+1) Columns of X are easily standardised
+(ADS02 - module 05-PCA, page 12)
+
+＄ import numpy as np
+＄ Xcentered = X - X.mean(0)
+＄ Xstandard = X / X.std(0)
+＄
+＄ # or even better
+＄ from sklearn.preprocessing import StandardScaler
+＄ Xstandard = StandardScaler().fit_transform(X)
+
+2) CROSS VALIDATION
+
+https://towardsdatascience.com/why-and-how-to-cross-validate-a-model-d6424b45261f
+https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html
+
+
+========================================================================================
+
+02-preprocessing/01-preprocessing-skeleton.ipynb
+
+Naive outlier removal
+=====================
+Here we show how you can get rid of outliers, if that is what you decide is best for your data.
+There are a number of ways to define outliers. One simple approach is to treat all points more than k standard deviations (sigma, σ) away from the mean (mu, μ) as outliers.
+Does such a metric make sense for the feature above?
+Below is a simple function that takes data and a value of k (the number of standard deviations), and filters out all values that lie outside the range 
+[𝜇−𝑘𝜎,𝜇+𝑘𝜎]
+
+
+# This function takes a pandas Series and filters out all elements that are outside
+# the range [mu-k*sigma , mu+k*sigma]
+
+def remove_outliers(data, k=3):
+    mu       = data.mean() # get the mean
+    sigma    = data.std()  # get the standard deviation
+    filtered = data[(mu - k*sigma < data) & (data < mu + k*sigma)]
+    return filtered
+
+# add your code here
+rental_df = rental_df.apply(remove_outliers) ###### apply to ALL THE COLUMNS!!!
+rental_df
+
+This remove_outliers() can be applied to your dataframe using the apply() method.
+In rows where a value is declared an outlier, its value is replaced with NaN, 
+which keeps the structure of our initial dataframe intact.
+Then remove the lines with NaN values (that correspond to lines with outliers). 
+For this, use the dropna() method on the dataframe. 
+
+##### drop nulls
+rental_df = rental_df.dropna()
+rental_df
+
+SCALING
+=======
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler() 
+
+# Apply auto-scaling (or any other type of scaling) and cast to DataFrame 
+rental = pd.DataFrame(
+                    scaler.fit_transform(rental_df), 
+                    columns = rental_df.columns, 
+                    index = rental_df.index)
+
+# Print the first rows
+rental.head()
+
+CORRELATION MATRIX (PANDAS)
+===========================
+# add your code here to compute the correlation matrix
+corrmat = rental.corr()
+
+# add your code here to visualise the correlation matrix using sns.heatmap
+plt.figure(figsize=(9,7))
+sns.heatmap(corrmat, 
+            linewidths=0.5, 
+            cmap="RdBu", 
+            vmin=-1, 
+            vmax=1, 
+            annot=True)
+
+plt.xticks(rotation=270);
+
+
+Plotting the Relationship Between Features
+==========================================
+As well as inspecting correlations and removing low-variance features, an essential tool for inspecting processed features and running exploratory data analysis is the scatter plot.
+This plot helps visualise the relationship between two input features. It may also give you a first indication of the Machine Learning model that could be applied and its complexity (linear vs. non-linear). 
+Given the small number of features, you can have a look at the pairplot of all of the features: a grid where each pair of feature is displayed against the other. This can help seeing the correlations present in your data. 
+Use sns.pairplot on the rental dataFrame to visualise this
+Can you interpret some of the relations that appear in the grid?
+
+sns.pairplot(rental)
+
+
+SHAP
+====
+
+https://github.com/slundberg/shap
+
+https://towardsdatascience.com/explain-any-models-with-the-shap-values-use-the-kernelexplainer-79de9464897a
+
+
+
